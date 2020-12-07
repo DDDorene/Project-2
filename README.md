@@ -1,5 +1,6 @@
 # Project-2
 Names and UNIs: Yuhan Liu yl4347 , Donglin Guan 3128
+Monday, December 7,2020
 
 # The database can be accessed through UNI of dg3128.
 
@@ -41,7 +42,7 @@ SELECT search_keyword FROM has_searches where to_tsvector( search_keyword) @@ to
 ```
 
 # 3 Creating trigger and trigger function
-The third modification is adding a trigger to the table rate_Reviews.. This trigger ensure that any insert, update or delete of a row in the rates_Reviews table is recorded in Reviews_audit table. The updated time is recorded together with the type of operation performed on it. And it checks that reviewnumber, Flightnumber, rating, remarks and source is given and that the salary is a positive value.
+The third modification is adding a trigger to the table rate_Reviews. This trigger ensure that any insert, update or delete of a row in the rates_Reviews table is recorded in Reviews_audit table. The updated time is recorded together with the type of operation performed on it. And it checks that reviewnumber, Flightnumber, rating, remarks and source is given and that the salary is a positive value.
 
 ```sh
 CREATE TABLE Reviews_audit( 
@@ -83,3 +84,10 @@ $Reviews_audit$ LANGUAGE plpgsql;
 CREATE TRIGGER Reviews_audit
 AFTER INSERT OR UPDATE OR DELETE ON rates_Reviews FOR EACH ROW EXECUTE FUNCTION process_Reviews_audit();
 ```
+
+This query delete the passenger with pid = 2 table in rate_Reviews probably because the user with pid = 2 does not want this rating and remarks valid anymore. The row will be removed from the rate_Reviews but will saved in the Reviews_audit recorded with deletion operation,'D', and the time this the being deleted.
+
+```sh
+DELETE FROM rate_Reviews WHERE pid = 2
+```
+
