@@ -1,9 +1,9 @@
 # Project-2
 Names and UNIs: Yuhan Liu yl4347 , Donglin Guan 3128
 
-#The database can be accessed through UNI of dg3128.
+# The database can be accessed through UNI of dg3128.
 
-#1
+# 1 Adding array attributes
 The first modification is adding arrays. In the new table credit_due, due_balances store the information that we are due in 1 year, 2years and 3 years respectively. 
 
 ```sh
@@ -16,7 +16,13 @@ CREATE TABLE credit_due(
                	REFERENCES Passengers);
 ```
 
-#2
+This query searches all the due_balances which satisfy the requirement that the due amount for year is less than 10000.
+
+```sh
+SELECT due_balances FROM credit_due where due_balances[1]< 10000
+```
+
+# 2 Adding text attributes
 The second modification is adding text attribute to our existing datasets of has_searches and rates reviews. We change some of the existing attributes in these tables to text type.
 
 ```sh
@@ -28,8 +34,13 @@ ALTER TABLE rates_Reviews
 ALTER TABLE has_searches
     ALTER COLUMN search_keyword TYPE TEXT;
 ```
+This query searches the word ‘good’ in the search_keyword from the table has_searches.
 
-#3
+```sh
+SELECT search_keyword FROM has_searches where to_tsvector( search_keyword) @@ to_tsquery (‘good’)
+```
+
+# 3 Creating trigger and trigger function
 The third modification is adding a trigger to the table rate_Reviews.. This trigger ensure that any insert, update or delete of a row in the rates_Reviews table is recorded in Reviews_audit table. The updated time is recorded together with the type of operation performed on it. And it checks that reviewnumber, Flightnumber, rating, remarks and source is given and that the salary is a positive value.
 
 ```sh
